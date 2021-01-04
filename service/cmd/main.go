@@ -9,6 +9,7 @@ import (
 
 	// "github.com/PASPARTUUU/Server_example/server"
 	"github.com/PASPARTUUU/Server_example/service/config"
+	"github.com/PASPARTUUU/Server_example/service/logger"
 	"github.com/PASPARTUUU/Server_example/service/server"
 )
 
@@ -22,7 +23,9 @@ const (
 func main() {
 	fmt.Println("i am alive")
 
-	router := server.NewRouter()
+	logger := logger.New()
+
+	router := server.NewRouter(logger)
 
 	server.RestInit(router)
 
