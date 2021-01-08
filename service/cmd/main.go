@@ -10,7 +10,9 @@ import (
 	// "github.com/PASPARTUUU/Server_example/server"
 	"github.com/PASPARTUUU/Server_example/service/config"
 	"github.com/PASPARTUUU/Server_example/service/logger"
+	"github.com/PASPARTUUU/Server_example/service/postgres"
 	"github.com/PASPARTUUU/Server_example/service/server"
+	"github.com/PASPARTUUU/Server_example/tools/errpath"
 )
 
 const (
@@ -23,13 +25,31 @@ const (
 func main() {
 	fmt.Println("i am alive")
 
+	cfg := config.Config{
+		Postgres: config.Postgres{
+			Host:     "localhost",
+			Port:     5432,
+			User:     "postgres",
+			Password: "postgres",
+			DBName:   "mydb",
+		},
+		ServerPort: 1324,
+	}
+
 	logger := logger.New()
+
+	// connect to postgres
+	pgConn, err := postgres.Connect(cfg.Postgres)
+	if err != nil {
+		logger.Fatal(errpath.Err(err))
+	}
+	logger.Infoln(errpath.Infof("%+v", pgConn.DB))
 
 	router := server.NewRouter(logger)
 
 	server.RestInit(router)
 
-	go server.Start(router, config.ServerPort)
+	go server.Start(router, cfg.ServerPort)
 	defer server.Stop(router, serverShutdownTimeout)
 
 	// Wait for program exit

@@ -10,9 +10,9 @@ import (
 )
 
 // Start -
-func Start(e *echo.Echo, addr string) {
-	port := fmt.Sprintf(":%v", addr)
-	if err := e.Start(port); err != nil {
+func Start(e *echo.Echo, port int) {
+	addr := fmt.Sprintf(":%v", port)
+	if err := e.Start(addr); err != nil {
 		log.Printf("[WARN] shutting down the server: %v", err)
 	}
 }
