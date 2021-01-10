@@ -13,6 +13,7 @@ require (
 	github.com/onsi/gomega v1.10.4 // indirect
 	github.com/pkg/errors v0.9.1
 	github.com/sirupsen/logrus v1.7.0
+	github.com/spf13/viper v1.7.1
 	go.uber.org/atomic v1.7.0
 	mellium.im/sasl v0.2.1 // indirect
 )
