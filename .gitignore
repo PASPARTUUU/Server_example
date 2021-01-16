@@ -15,3 +15,5 @@
 # vendor/
 
 /temp
+
+!migrations/win_migrate.exe
