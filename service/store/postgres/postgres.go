@@ -13,20 +13,19 @@ import (
 // Pg -
 type Pg struct {
 	DB *pg.DB
+
+	User UserRepo
 }
 
-// NewPg -
-func NewPg(db *pg.DB) (*Pg, error) {
-
-	return &Pg{DB: db}, nil
-}
+// Tracer -
+var Tracer *DBQueryTraceHook
 
 // -------------------------------------------------
 // -------------------------------------------------
 // -------------------------------------------------
 
-// Connect -
-func Connect(cfg config.Postgres) (*Pg, error) {
+// NewConnect -
+func NewConnect(cfg config.Postgres) (*Pg, error) {
 
 	// Connect to the db and remember to close it
 	db := pg.Connect(&pg.Options{
@@ -43,10 +42,11 @@ func Connect(cfg config.Postgres) (*Pg, error) {
 		return nil, errpath.Err(err, "failed to connect to the db")
 	}
 
-	defer db.Close()
+	Tracer = InitDebugSQLQueryHook(db)
 
 	return &Pg{
-		DB: db,
+		DB:   db,
+		User: NewUserRepo(db),
 	}, nil
 }
 
@@ -57,6 +57,15 @@ func Connect(cfg config.Postgres) (*Pg, error) {
 // DBQueryTraceHook -
 type DBQueryTraceHook struct {
 	enableCounter *atomic.Int32
+}
+
+// InitDebugSQLQueryHook -
+func InitDebugSQLQueryHook(conn *pg.DB) *DBQueryTraceHook {
+	hook := DBQueryTraceHook{
+		enableCounter: atomic.NewInt32(0),
+	}
+	conn.AddQueryHook(&hook)
+	return &hook
 }
 
 // BeforeQuery -
@@ -90,12 +99,3 @@ func (db *DBQueryTraceHook) StartTrace() { db.enableCounterInc() }
 func (db *DBQueryTraceHook) enableCounterInc()     { db.enableCounter.Inc() }
 func (db *DBQueryTraceHook) enableCounterDec()     { db.enableCounter.Dec() }
 func (db *DBQueryTraceHook) enableCounterVal() int { return int(db.enableCounter.Load()) }
-
-// InitDebugSQLQueryHook -
-func InitDebugSQLQueryHook(conn *pg.DB) *DBQueryTraceHook {
-	hook := DBQueryTraceHook{
-		enableCounter: atomic.NewInt32(0),
-	}
-	conn.AddQueryHook(&hook)
-	return &hook
-}

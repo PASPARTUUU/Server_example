@@ -20,7 +20,7 @@
             "env": {},
             "args": [
                 "-config",
-                "${workspaceFolder}/config/home_pc_config.toml"
+                "${workspaceFolder}/configs/home_pc_config.toml"
             ]
         },
         {
@@ -32,7 +32,7 @@
             "env": {},
             "args": [
                 "-config",
-                "${workspaceFolder}/config/linux_notebook_config.toml"
+                "${workspaceFolder}/configs/linux_notebook_config.toml"
             ]
         }
     ]

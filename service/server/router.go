@@ -6,14 +6,10 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/sirupsen/logrus"
 
-	// mymware "github.com/PASPARTUUU/Server_example/service/server/middleware"
 	mymware "github.com/PASPARTUUU/Server_example/service/server/middleware"
 )
 
-// RouterOption to allow config an echo instance
-type RouterOption func(*echo.Echo)
-
-// NewRouter - creates a new echo instance, uses provided options and sets the default middleware
+// NewRouter - creates a new echo instance
 func NewRouter(logger *logrus.Logger) *echo.Echo {
 	e := echo.New()
 

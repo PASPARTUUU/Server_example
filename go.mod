@@ -4,6 +4,7 @@ go 1.15
 
 require (
 	github.com/go-pg/pg v8.0.7+incompatible
+	github.com/gofrs/uuid v4.0.0+incompatible
 	github.com/jinzhu/inflection v1.0.0 // indirect
 	github.com/labstack/echo/v4 v4.1.17
 	github.com/labstack/gommon v0.3.0
